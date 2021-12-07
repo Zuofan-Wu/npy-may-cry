@@ -19,10 +19,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     config, config_name = load_config(args.config)
-    seed_all(config.train.seed)
-
-    log_dir = os.path.dirname(os.path.dirname(args.resume))
-    ckpt_dir = os.path.join(log_dir, 'checkpoints')
     logger = get_logger('evaluate', None)
 
     logger.info(args)
@@ -44,5 +40,6 @@ if __name__ == "__main__":
     logger.info('Resuming optimizer states...')
     optimizer.load_state_dict(ckpt['optimizer'])
 
+    model.eval()
     ret = model.generate(args.num_gen)
     logger.info(ret)

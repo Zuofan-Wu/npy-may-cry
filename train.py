@@ -71,7 +71,10 @@ if __name__ == "__main__":
             'time_backward': (time_backward_end - time_forward_end) / 1000,
         })
         if (i + 1) % config.train.val_freq == 0:
-            ret = model.generate(config.train.val_num)
+            with torch.no_grad():
+                model.eval()
+                ret = model.generate(config.train.val_num)
+            model.train()
             logger.info(ret)
             if not args.debug:
                 ckpt_path = os.path.join(ckpt_dir, '%d.pt' % i)

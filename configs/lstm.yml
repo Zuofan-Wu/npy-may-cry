@@ -1,0 +1,18 @@
+model:
+  type: LSTM
+  feat_dim: 256
+  num_layers: 2
+  dropout: 0.2
+
+train:
+  batch_size: 64
+  seed: 114514
+  max_iters: 10_000
+  val_freq: 100
+  val_num: 20
+  optimizer:
+    type: adam
+    lr: 1.e-3
+    weight_decay: 0.0
+    beta1: 0.9
+    beta2: 0.999
