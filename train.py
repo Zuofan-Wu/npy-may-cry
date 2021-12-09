@@ -8,7 +8,7 @@ from torch.utils.data import DataLoader
 from utils import get_logger, get_new_log_dir, get_checkpoint_path, inf_iterator, load_config, seed_all,\
                   PaddingCollate, recursive_to, get_optimizer, get_scheduler, log_loss, current_milli_time
 from data.data import QinghuaDataset
-from model import BasicModel
+from model import BasicModel, AttentionModel
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -42,7 +42,11 @@ if __name__ == "__main__":
                               collate_fn=PaddingCollate(train_dataset.dictionary))
     train_iterator = inf_iterator(train_loader)
 
-    model = BasicModel(config.model, train_dataset.dictionary)
+    if config.model.type in ["LSTM", "RNN", "GRU"]:
+        model = BasicModel(config.model, train_dataset.dictionary)
+    elif config.model.type in ["ATTENTION"]:
+        model = AttentionModel(config.model, train_dataset.dictionary)
+
     optimizer = get_optimizer(config.train.optimizer, model)
     it_first = 0
 
@@ -60,7 +64,7 @@ if __name__ == "__main__":
         optimizer.zero_grad()
 
         time_start = current_milli_time()
-        loss, _, _ = model.get_loss(x, mask=mask)
+        loss = model.get_loss(x, mask=mask)
         time_forward_end = current_milli_time()
         loss.backward()
         optimizer.step()

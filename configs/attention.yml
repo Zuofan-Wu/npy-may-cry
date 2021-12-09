@@ -1,0 +1,20 @@
+model:
+  type: ATTENTION
+  feat_dim: 128
+  num_heads: 12
+  q_dim: 16
+  kv_dim: 16
+  num_layers: 2
+
+train:
+  batch_size: 64
+  seed: 19981103
+  max_iters: 10_000
+  val_freq: 100
+  val_num: 20
+  optimizer:
+    type: adam
+    lr: 1.e-3
+    weight_decay: 0.0
+    beta1: 0.9
+    beta2: 0.999
